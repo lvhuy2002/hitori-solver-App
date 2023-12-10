@@ -104,17 +104,25 @@ public class OptimizedCESolver extends BaseSolver{
         for (int i = 1; i <= matrixSize; i++) {
             for (int j = 1; j <= matrixSize; j++) {
                 if (j != matrixSize) {
-                    ArrayList<Integer> cnfRow = new ArrayList<Integer>();
-                    cnfRow.add(makeIdForW(i, j));
-                    cnfRow.add(makeIdForW(i, j + 1));
-                    cnfClause.add(arrayListToArray(cnfRow));
+                    //fix here
+                    if (blackPosible[i - 1][j - 1] && blackPosible[i - 1][j]) {
+                        ArrayList<Integer> cnfRow = new ArrayList<Integer>();
+                        cnfRow.add(makeIdForW(i, j));
+                        cnfRow.add(makeIdForW(i, j + 1));
+                        cnfClause.add(arrayListToArray(cnfRow));
+                    }
+                  
                 }
 
                 if (i != matrixSize) {
-                    ArrayList<Integer> cnfColumn = new ArrayList<Integer>();
-                    cnfColumn.add(makeIdForW(i, j));
-                    cnfColumn.add(makeIdForW(i + 1, j));
-                    cnfClause.add(arrayListToArray(cnfColumn));
+                    //fix here
+                    if (blackPosible[i - 1][j - 1] && blackPosible[i][j - 1]) {
+                        ArrayList<Integer> cnfColumn = new ArrayList<Integer>();
+                        cnfColumn.add(makeIdForW(i, j));
+                        cnfColumn.add(makeIdForW(i + 1, j));
+                        cnfClause.add(arrayListToArray(cnfColumn));
+                    }
+                  
                 }
 
             }
@@ -138,6 +146,8 @@ public class OptimizedCESolver extends BaseSolver{
                     for (int j = 2; j < matrixSize; j++) {
                         //chỉ xét các ô i,j ko phải biên làm cầu nối
                         //xét các ô x,y là ô chéo kề của ô i,j
+                        //fix here
+                        if (!blackPosible[u - 1][v - 1] || !blackPosible[i - 1][j - 1]) continue;
                         if (u == i && v == j) continue;
                         if ((u + v) % 2 != (i + j) % 2) continue;
                         for (int p1 = 0; p1 < 2; p1++) 
@@ -145,6 +155,8 @@ public class OptimizedCESolver extends BaseSolver{
                                 int x = i + ((p1 == 1) ? 1 : -1); 
                                 int y = j + ((p2 == 1) ? 1 : -1);
                                 if (x == 1 || x == matrixSize || y == 1 || y == matrixSize) continue;
+                                //fix here
+                                if (!blackPosible[x - 1][y - 1]) continue;
                                 ArrayList<Integer> cnf = new ArrayList<>();
                                 cnf.add(-makeIdForC(u, v, i, j));
                                 cnf.add(-makeIdForC(i, j, x, y));
@@ -171,6 +183,8 @@ public class OptimizedCESolver extends BaseSolver{
         // tránh tạo thành cycle
         for (int i = 1; i <= matrixSize; i++) {
             for (int j = 1; j <= matrixSize; j++) {
+                //fix here
+                if (!blackPosible[i - 1][j - 1]) continue;
                 int ijijCId = makeIdForC(i, j, i, j);
                 ArrayList<Integer> cnf = new ArrayList<>();
                 cnf.add(-ijijCId);

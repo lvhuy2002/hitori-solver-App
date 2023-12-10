@@ -234,7 +234,7 @@ public class PrimaryController {
 
     void AddNewContentToTextArea(String content) {
         informationTextArea.setText(
-                informationTextArea.getText() + "--------------------------------------------------\n" + content);
+                informationTextArea.getText() + "----------------------------------------\n" + content);
         informationTextArea.positionCaret(informationTextArea.getLength());
     }
 

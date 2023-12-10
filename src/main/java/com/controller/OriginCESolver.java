@@ -29,7 +29,6 @@ public class OriginCESolver extends BaseSolver {
                     this.result[i][j] = 0;
             return;
         }
-        // PrintClause();
         try {
             solveSAT();
         } catch (ContradictionException e) {
@@ -92,7 +91,7 @@ public class OriginCESolver extends BaseSolver {
 
     // Luật này để tránh cycle và chain
     public void generateThirdRuleClause() {
-        // nếu 2 ô ij, kl chéo nhau là ô đen thì Cijkl hoặc Cklij  là true
+        
         for (int i = 1; i <= matrixSize; i++) {
             for (int j = 1; j <= matrixSize; j++) {
                 if (i != 1 && j != 1) {
@@ -187,6 +186,7 @@ public class OriginCESolver extends BaseSolver {
     }
 
     private void makeCNFToMakeC(int i, int j, int k, int l) {
+        // nếu 2 ô ij, kl chéo nhau là ô đen thì Cijkl hoặc Cklij  là true
         int ijWId = makeIdForW(i, j);
         int klWId = makeIdForW(k, l);
         int ijklCId = makeIdForC(i, j, k, l);
@@ -206,6 +206,7 @@ public class OriginCESolver extends BaseSolver {
         cnfClause.add(arrayListToArray(cnf1));
         cnfClause.add(arrayListToArray(cnf2));
 
+        // ô biên luôn hướng vào trong
         if (k == 1 || k == matrixSize || l == 1 || l == matrixSize) {
             int[] clause = {-makeIdForC(i, j, k, l)};
             cnfClause.add(clause);
